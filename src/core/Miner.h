@@ -54,7 +54,8 @@ public:
     const std::vector<IBackend *> &backends() const;
     Job job() const;
     void execCommand(char command);
-    void pause();
+    void pause(int pause);
+    void resume(int pause);
     void setEnabled(bool enabled);
     void setJob(const Job &job, bool donate);
     void stop();

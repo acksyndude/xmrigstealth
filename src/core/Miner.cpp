@@ -503,13 +503,20 @@ void xmrig::Miner::execCommand(char command)
 }
 
 
-void xmrig::Miner::pause()
+void xmrig::Miner::pause(int pause)
 {
-    d_ptr->active = false;
-    d_ptr->m_taskbar.setActive(false);
+    d_ptr->auto_pause += pause;
+    setEnabled(false);
+}
 
-    Nonce::pause(true);
-    Nonce::touch();
+
+void xmrig::Miner::resume(int pause)
+{
+    d_ptr->auto_pause -= pause;
+    if (d_ptr->auto_pause < 0) {
+        d_ptr->auto_pause = 0;
+    }
+    setEnabled(true);
 }
 
 
