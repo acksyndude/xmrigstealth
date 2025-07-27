@@ -40,6 +40,11 @@ class Network;
 class Controller : public Base
 {
 public:
+    enum PauseReason {
+        PAUSE_NONE,
+        PAUSE_STEALTH
+    };
+
     XMRIG_DISABLE_COPY_MOVE_DEFAULT(Controller)
 
     Controller(Process *process);

