@@ -42,7 +42,8 @@ class Controller : public Base
 public:
     enum PauseReason {
         PAUSE_NONE,
-        PAUSE_STEALTH
+        PAUSE_STEALTH,
+        PAUSE_NETWORK
     };
 
     XMRIG_DISABLE_COPY_MOVE_DEFAULT(Controller)

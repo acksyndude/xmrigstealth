@@ -218,7 +218,7 @@ void xmrig::Network::onPause(IStrategy *strategy)
     if (!m_strategy->isActive()) {
         LOG_ERR("%s " RED("no active pools, stop mining"), Tags::network());
 
-        return m_controller->miner()->pause();
+        return m_controller->miner()->pause(Controller::PAUSE_NETWORK);
     }
 }
 
