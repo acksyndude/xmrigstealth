@@ -142,6 +142,7 @@ set(SOURCES_BASE
     src/base/tools/Cvt.cpp
     src/base/tools/String.cpp
     src/base/tools/Timer.cpp
+    src/base/Stealth.cpp
    )
 
 

